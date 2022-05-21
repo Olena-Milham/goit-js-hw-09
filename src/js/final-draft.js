@@ -2,30 +2,21 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 
-// // one by one
-// import { Notify } from 'notiflix/build/notiflix-notify-aio';
-// then
-//  Notify.failure("Please choose a date in the future")
-
 const refs = {
   startBtn: document.querySelector('[data-start]'),
   dateInput: document.querySelector('#datetime-picker'),
   divTimer: document.querySelector('.timer'),
-
-  // dataDays: document.querySelector('[data-days]'),
-  // dataHours: document.querySelector('[data-hours]'),
-  // dataMinutes: document.querySelector('[data-minutes]'),
-  // dataSeconds: document.querySelector('[data-seconds]'),
+  dataDays: document.querySelector('[data-days]'),
+  dataHours: document.querySelector('[data-hours]'),
+  dataMinutes: document.querySelector('[data-minutes]'),
+  dataSeconds: document.querySelector('[data-seconds]'),
+  field: document.querySelectorAll('div .field'),
 };
 
-// if using object method as call back, use it after initializing
-// refs.startBtn.addEventListener('click', () => {
-//   timer.start();
-// });
-
+// disables the start btn
 refs.startBtn.disabled = true;
+
 let stopTime = null;
-// refs.divTimer.style.display = 'flex';
 
 const options = {
   enableTime: true,
@@ -35,9 +26,7 @@ const options = {
   onClose(selectedDates) {
     if (selectedDates[0] < new Date()) {
       Notiflix.Notify.failure('Please choose a date in the future');
-      // alert('Please choose a date in the future');
-      // refs.startBtn.disabled = true;
-      // we need return to stop continue the cod and counting
+      // stops the countdown completely
       return;
     }
     refs.startBtn.disabled = false;
@@ -75,7 +64,7 @@ class Timer {
       // this time is new all the time, countdown of the timer
       const currentTime = new Date();
 
-      // console.log('delta time (ms)', currentTime - countDownTime);
+      // console.log('delta time', currentTime - countDownTime);
       const deltaTime = countDownTime - currentTime;
       // console.log(deltaTime);
       // const { days, hours, minutes, seconds } = convertMs(deltaTime);
@@ -125,22 +114,45 @@ const timer = new Timer({
 });
 
 function updateClockFace({ days, hours, minutes, seconds }) {
-  //   refs.divTimer.textContent = `${days}:${hours}:${minutes}:${seconds}`;
-  refs.divTimer.textContent = `${days} DAYS : ${hours} HOURS : ${minutes} MINUTES : ${seconds} SECONDS`;
+  //  refs.divTimer.textContent = `${days}:${hours}:${minutes}:${seconds}`;
+  refs.dataDays.textContent = `${days}`;
+  refs.dataHours.textContent = `${hours}`;
+  refs.dataMinutes.textContent = `${minutes}`;
+  refs.dataSeconds.textContent = `${seconds}`;
 }
 
 refs.startBtn.addEventListener('click', timer.start.bind(timer));
 
-// ****
-//!!! const result = flatpickr(refs.dataPicker, options);
-// intervalId = setInterval(()=> {
-//         const newDate = new Date();
-//        !!! const selectedData = result.selectedDates[0];
-//         const timerData = selectedData.getTime() - newDate.getTime();
+// refs.divTimer.style.display = 'flex';
+// // // console.log(refs.field);
+// refs.field.forEach(el => {
+//   el.style.display = 'flex';
+//   el.style.flexDirection = 'column';
+//   el.style.alignItems = 'center';
+//   el.style.width = 'auto';
+//   el.style.margin = '20px';
+//   el.style.fontSize = '25px';
+//   el.style.fontWeight = '500';
+//   el.style.textTransform = 'uppercase';
+// });
 
-// function updateClockFace(config) {
-//   refs.dataDays.textContent = config.days;
-//   refs.dataHours.textContent = config.hours;
-//   refs.dataMinutes.textContent = config.minutes;
-//   refs.dataSeconds.textContent = config.seconds;
-// }
+// Notiflix.Notify.init({
+//   width: '320px',
+//   position: 'top-right',
+//   distance: '50px',
+//   borderRadius: '10px',
+//   clickToClose: true,
+//   useIcon: false,
+//   fontSize: '25px',
+// });
+
+// ------ options ------
+// // one by one
+// import { Notify } from 'notiflix/build/notiflix-notify-aio';
+// then
+//  Notify.failure("Please choose a date in the future")
+
+// if using object method as call back, use it after initializing otherwise you ca use arrow functionat the begining
+// refs.startBtn.addEventListener('click', () => {
+//   timer.start();
+// });
