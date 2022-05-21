@@ -125,6 +125,7 @@ const timer = new Timer({
 });
 
 function updateClockFace({ days, hours, minutes, seconds }) {
+  //   refs.divTimer.textContent = `${days}:${hours}:${minutes}:${seconds}`;
   refs.divTimer.textContent = `${days} DAYS : ${hours} HOURS : ${minutes} MINUTES : ${seconds} SECONDS`;
 }
 
