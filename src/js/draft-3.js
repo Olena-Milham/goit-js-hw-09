@@ -2,14 +2,30 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 
+// // one by one
+// import { Notify } from 'notiflix/build/notiflix-notify-aio';
+// then
+//  Notify.failure("Please choose a date in the future")
+
 const refs = {
   startBtn: document.querySelector('[data-start]'),
   dateInput: document.querySelector('#datetime-picker'),
   divTimer: document.querySelector('.timer'),
+
+  // dataDays: document.querySelector('[data-days]'),
+  // dataHours: document.querySelector('[data-hours]'),
+  // dataMinutes: document.querySelector('[data-minutes]'),
+  // dataSeconds: document.querySelector('[data-seconds]'),
 };
+
+// if using object method as call back, use it after initializing
+// refs.startBtn.addEventListener('click', () => {
+//   timer.start();
+// });
 
 refs.startBtn.disabled = true;
 let stopTime = null;
+// refs.divTimer.style.display = 'flex';
 
 const options = {
   enableTime: true,
@@ -19,6 +35,9 @@ const options = {
   onClose(selectedDates) {
     if (selectedDates[0] < new Date()) {
       Notiflix.Notify.failure('Please choose a date in the future');
+      // alert('Please choose a date in the future');
+      // refs.startBtn.disabled = true;
+      // we need return to stop continue the cod and counting
       return;
     }
     refs.startBtn.disabled = false;
@@ -110,3 +129,17 @@ function updateClockFace({ days, hours, minutes, seconds }) {
 }
 
 refs.startBtn.addEventListener('click', timer.start.bind(timer));
+
+// ****
+// const result = flatpickr(refs.dataPicker, options);
+// intervalId = setInterval(()=> {
+//         const newDate = new Date();
+//         const selectedData = result.selectedDates[0];
+//         const timerData = selectedData.getTime() - newDate.getTime();
+
+// function updateClockFace(config) {
+//   refs.dataDays.textContent = config.days;
+//   refs.dataHours.textContent = config.hours;
+//   refs.dataMinutes.textContent = config.minutes;
+//   refs.dataSeconds.textContent = config.seconds;
+// }
