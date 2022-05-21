@@ -14,9 +14,9 @@ refs.startBtn.addEventListener('click', () => {
 refs.startBtn.disabled = true;
 let stopTime = null;
 
-let countDownTime = null;
-let currentTime = null;
-let deltaTime = null;
+// let countDownTime = null;
+// let currentTime = null;
+// let deltaTime = null;
 
 const options = {
   enableTime: true,
@@ -47,17 +47,17 @@ const timer = {
     }
     // when start method is called , save current time, start time at the point
     // countDownTime = selectedDates[0];
-    countDownTime = stopTime;
+    const countDownTime = stopTime;
     this.isActive = true;
     this.setIntervalId = setInterval(() => {
       // startTime is always the same
 
       //  time when the interval function is colled,
       // this time is new all the time, countdown of the timer
-      currentTime = new Date();
+      const currentTime = new Date();
 
       // console.log('delta time (ms)', currentTime - countDownTime);
-      deltaTime = countDownTime - currentTime;
+      const deltaTime = countDownTime - currentTime;
       // console.log(deltaTime);
       // const { days, hours, minutes, seconds } = convertMs(ms);
       const { days, hours, minutes, seconds } = convertMs(deltaTime);
