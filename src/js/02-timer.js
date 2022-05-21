@@ -1,69 +1,80 @@
-// import flatpickr from 'flatpickr';
-// import 'flatpickr/dist/flatpickr.min.css';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
-// const refs = {
-//   startBtn: document.querySelector('[data-start]'),
-//   dateTimePicker: document.querySelector('#datetime-picker'),
-// };
+const refs = {
+  startBtn: document.querySelector('[data-start]'),
+  dateInput: document.querySelector('#datetime-picker'),
+  divTimer: document.querySelector('.timer'),
+};
 
-// flatpickr(refs.dateTimePicker, options);
+refs.startBtn.disabled = true;
+let countDownTime = null;
+let currentTime = null;
+let ms = null;
 
-// const options = {
-//   enableTime: true,
-//   time_24hr: true,
-//   defaultDate: new Date(),
-//   minuteIncrement: 1,
-//   onClose(selectedDates) {
-//     console.log(selectedDates[0]);
-//   },
-// };
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    if (selectedDates[0] < new Date()) {
+      alert('Please choose a date in the future');
+    }
+    refs.startBtn.disabled = false;
+    console.log(selectedDates[0]);
+    // When you click the "Start" button,
+    // the countdown to the selected date starts from
+    //  the time of clicking.
+    const timer = {
+      // properties of this timer
+      setIntervalId: null,
+      isActive: false,
+      start() {
+        // if timer is active , just leave this code and don't fulfill the body of the function
+        if (this.isActive) {
+          return;
+        }
+        // when start method is called , save current time, start time at the point
+        countDownTime = selectedDates[0];
+        this.isActive = true;
+        this.setIntervalId = setInterval(() => {
+          // startTime is always the same
 
-// const date = new Date();
-// console.log(date);
-// console.log(date.getDate());
-// console.log(date.getDay());
-// console.log(date.getMonth());
-// console.log(date.getFullYear());
-// console.log('getUTCDate(): ', date.getUTCDate());
-// console.log('getUTCHours(): ', date.getUTCHours());
-// console.log(date.setFullYear(2040, 4, 8));
-// console.log(new Date('March 16, 2030 14:25:00'));
-// // date.toString();
-// const preciseTeamMeetingDate = new Date('March 16, 2030 14:25:00');
-// console.log(preciseTeamMeetingDate);
-// const date2 = new Date(2220095790833);
-// console.log(date2);
+          //  time when the interval function is colled,
+          // this time is new all the time, countdown of the timer
+          currentTime = new Date();
 
-// const DELAY = 3000;
-// const date3 = Date.now();
-// console.log(date3);
+          // console.log('delta time (ms)', currentTime - countDownTime);
+          ms = countDownTime - currentTime;
+          // const { days, hours, minutes, seconds } = convertMs(ms);
+          const { days, hours, minutes, seconds } = convertMs(ms);
+          // changes the look of the clock 2h08m32s
+          updateClockFace({ days, hours, minutes, seconds });
+          console.log(`${days}:${hours}:${minutes}:${seconds}`);
+        }, 1000);
+      },
+      stop() {
+        clearInterval(this.setIntervalId);
+        this.isActive = false;
+      },
+    };
+    // turn on timer on click
+    refs.startBtn.addEventListener('click', () => {
+      timer.start();
+      // if (countDownTime === currentTime)
+      if ({ days, hours, minutes, seconds } === 0) {
+        timer.stop();
+      }
+    });
 
-// setTimeout(() => {
-//   const date4 = Date.now();
-
-//   console.log(date4);
-//   console.log(date4 - date3);
-// }, DELAY);
-
-const timer = {
-  // start timer
-  start() {
-    // save start time/ current time at function call
-    const startTme = Date.now();
-    setInterval(() => {
-      // time at function call
-      const currentTime = Date.now();
-      const deltaTime = currentTime - startTme;
-      // const ms = endTime - currentTime;
-      //   const timeConvert = convertMs(deltaTime);
-      //   console.log(timeConvert);
-      const { days, hours, minutes, seconds } = convertMs(deltaTime);
-      console.log(`${days}:${hours}:${minutes}:${seconds}`);
-    }, 1000);
+    // when this method is called startTime is being created
+    // and we'll call interval, which will be calling another function every second
+    // timer.start();
   },
 };
-// starts counting
-timer.start();
+
+flatpickr(refs.dateInput, options);
 
 function convertMs(ms) {
   // Number of milliseconds per unit of time
@@ -84,13 +95,31 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
-
-// Напиши функцию addLeadingZero(value),
-// которая использует метод метод padStart()
-//  и перед отрисовкой интефрейса форматируй значение.
 function addLeadingZero(value) {
   return String(value).padStart(2, 0);
 }
+
+function updateClockFace({ days, hours, minutes, seconds }) {
+  refs.divTimer.textContent = `${days}:${hours}:${minutes}:${seconds}`;
+}
+
+// refs.startBtn.addEventListener('click', timer.start.bind(timer));
+// **********************
+
+// const timer = {
+//   start() {
+//     // when start method is called , save current time, start time
+//     // const startTime = options.defaultDate;
+//     setInterval(() => {
+//       // startTime is always the same
+//       // console.log('start -> startTimr' startTime);
+//       //  time when the interval function is colled, this time is new all the tiome , countdown of the timer
+//       const currentTime = Date.now();
+//       console.log('start -> startTimr', currentTime);
+//     }, 1000);
+//   },
+// };
+
+// // when this method is called startTime is being created
+// // and we'll call interval, which will be calling another function every second
+// timer.start();
